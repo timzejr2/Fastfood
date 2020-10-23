@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fast-Food</title>
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-database.js"></script>
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyDzch55Py-UBSfN4jguz7voNvxTrwAOeGQ",
+    authDomain: "db-fastfood.firebaseapp.com",
+    databaseURL: "https://db-fastfood.firebaseio.com",
+    projectId: "db-fastfood",
+    storageBucket: "db-fastfood.appspot.com",
+    messagingSenderId: "218166179498",
+    appId: "1:218166179498:web:e9a66d0c53b81a38c482d3"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+</script>
+
+
+   <link rel="stylesheet" href="pedido.css">
+</head>
+<body>
+    <header>
+        <h1>MC do Naldo</h1>
+    </header>
+    <section>
+        <h2>Faça seu pedido</h2>
+        <div class="outbox">
+            <div class="box">
+                <img class="imgProduto" src="hamburguer.png" alt="">
+                <h3>Hamburgão</h3>
+                <div class="preco">R$15,00</div>
+                <label class="descricao" for="quanthamburger">Quantidade:</label>
+                <input class="campos" type="number" id="quanthamburger" min="0" value="0">
+            </div>
+            <button class="adicionar" id="botaohamburger" type="button" onclick="enviarHamburger(); Total();">
+                Adicionar ao pedido
+            </button>
+            <button class="adicionar" id="botaohamburgeron" type="button" onclick="removerHamburger(); Total();">
+                Remover do pedido
+            </button>
+        </div>
+        <div class="outbox">
+            <div class="box">
+                <img class="imgProduto" src="Duplo.png" alt="">
+                <h3>Hmburgão Duplo</h3>
+                <div class="preco">R$25,00</div>
+                <label class="descricao" for="quantduplo">Quantidade:</label>
+                <input class="campos" type="number" id="quantduplo" min="0" value="0">
+            </div>
+            <button class="adicionar" id="botaoduplo" type="button" onclick="enviarDuplo(); Total();">
+                Adicionar ao pedido
+            </button>
+            <button class="adicionar" id="botaoduploon" type="button" onclick="removerDuplo(); Total();">
+                Remover do pedido
+            </button>
+        </div>
+        <div class="outbox">
+            <div class="box">
+                <img class="imgProduto" src="Fritas.png" alt="">
+                <h3>Fritas</h3>
+                <div class="preco">R$5,00</div>
+                <label class="descricao" for="quanfritas">Quantidade:</label>
+                <input class="campos" type="number" id="quantfritas" min="0" value="0">
+            </div>
+            <button class="adicionar" id="botaofritas" type="button" onclick="enviarFritas(); Total();">
+                Adicionar ao pedido
+            </button>
+            <button class="adicionar" id="botaofritason" type="button" onclick="removerFritas(); Total();">
+                Remover do pedido
+            </button>
+        </div>
+        <div class="outbox">
+            <div class="box">
+                <img class="imgProduto" src="Refri.png" alt="">
+                <h3>Refrigerante - Refil</h3>
+                <div class="preco">R$10,00</div>
+                <label class="descricao" for="quantrefri">Quantidade:</label>
+                <input class="campos" type="number" id="quantrefri" min="0" value="0">
+            </div>
+            <button class="adicionar" id="botaorefri" type="button" onclick="enviarRefri(); Total();">
+                Adicionar ao pedido
+            </button>
+            <button class="adicionar" id="botaorefrion" type="button" onclick="removerRefri(); Total();">
+                Remover do pedido
+            </button>
+        </div>
+        <div class="outbox">
+            <div class="box">
+                <img class="imgProduto" src="Sundae.png" alt="">
+                <h3>Sundae</h3>
+                <div class="preco">R$10,00</div>
+                <label class="descricao" for="quantsundae">Quantidade:</label>
+                <input class="campos" type="number" id="quantsundae" min="0" value="0">
+            </div>
+            <button class="adicionar" id="botaosundae" type="button" onclick="enviarSundae(); Total();">
+                Adicionar ao pedido
+            </button>
+            <button class="adicionar" id="botaosundaeon" type="button" onclick="removerSundae(); Total();">
+                Remover do pedido
+            </button>
+        </div>
+    </section>
+    <aside>
+        <h2 class="tabela">Itens no pedido</h2>
+        <div id="item"></div>
+        <br>
+        <div class="divisor"></div>
+        <br>
+        <label class="descquant" for="numero">Numero do pedido</label>
+        <input id="numero" type="number" min="1" value="1">
+        <br>
+        <label class="descquant" for="formaPagamento">Forma de pagamento:</label>
+            <select class="quant" id="formaPagamento">
+                <option value="Credito">Crédito</option>
+                <option value="Debito">Débito</option>
+                <option value="Dinheiro">Dinheiro</option>
+            </select>
+        <br><br>
+        <button id="calculos" class="descquant" type="button" onclick="salvar()">Finalizar Pedido</button>
+        <div class="divisor"></div>
+        <br>
+        <div class='descquant' id="soma"></div>
+    </aside>
+    <div class="quadro">
+        <h1 class="tituloLista">Lista de pedidos</h1>
+        <table id="idPedidosTable">
+            <tr>
+                <th>Número do Pedido</th>
+                <th>Hamburgão</th>
+                <th>Hamburgão Duplo</th>
+                <th>Fritas</th>
+                <th>Refri</th>
+                <th>Sundae</th>
+                <th>Status</th>
+                <th>Opções</th>
+            </tr>
+        </table>
+    </div>
+    <div class="quadro">
+        <div class="tituloQuadro">
+          Pedido concluido!
+        </div>
+        <div id="retirar" class="retirarPedido">
+            -
+        </div>
+    </div>    
+    <script src="pedido.js"></script>
+</body>
+</html>
